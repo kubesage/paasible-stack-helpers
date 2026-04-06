@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install yamllint
+        run: pip install yamllint
+      - name: Lint stack descriptors
+        run: yamllint stacks/
+      - name: Verify all stacks have stack.yaml
+        run: |
+          for dir in stacks/*/; do
+            if [ ! -f "$dir/stack.yaml" ]; then
+              echo "Missing stack.yaml in $dir"
+              exit 1
+            fi
+          done

@@ -1,0 +1,43 @@
+slug: kubesage
+display_name: KubeSage Intelligence
+description: AI-powered Kubernetes monitoring, cost optimization, and security analysis agent.
+component_name: oci://ghcr.io/kubesage/charts/kubesage
+default_version: 0.1.0
+compatible_tiers:
+  - pro
+  - enterprise
+components:
+  - KubeSage Agent
+  - Metrics Collector
+namespace: kubesage
+category: intelligence
+icon: brain
+docs_url: https://docs.kubesage.com
+
+tier_presets:
+  pro:
+    agent:
+      scanInterval: "30m"
+      resources:
+        requests: { cpu: "100m", memory: "256Mi" }
+        limits: { cpu: "500m", memory: "512Mi" }
+    analytics:
+      advanced: false
+  enterprise:
+    agent:
+      scanInterval: "15m"
+      resources:
+        requests: { cpu: "250m", memory: "512Mi" }
+        limits: { cpu: "1", memory: "1Gi" }
+    analytics:
+      advanced: true
+
+overridable_values:
+  - key: agent.scanInterval
+    type: string
+    description: "Interval between cluster scans"
+    allowed_values: ["15m", "30m", "1h", "2h"]
+  - key: agent.resources.requests.memory
+    type: string
+    description: "Agent memory request"
+    allowed_values: ["256Mi", "512Mi", "1Gi"]

@@ -1,0 +1,81 @@
+# Custom Stack Descriptor Example
+#
+# This file demonstrates how to define a custom platform stack
+# that can be deployed onto Gardener-managed Kubernetes clusters via PaaSible.
+#
+# Copy this file to stacks/<your-stack-name>/stack.yaml and customize.
+
+# Unique identifier for this stack (lowercase, hyphenated)
+slug: my-custom-stack
+
+# Human-readable name shown in the PaaSible dashboard
+display_name: My Custom Stack
+
+# Brief description of what this stack provides
+description: A custom platform stack with example components.
+
+# OCI artifact reference for the packaged Helm chart / OCM component
+component_name: oci://ghcr.io/your-org/charts/my-custom-stack
+
+# Default version to deploy when no version is specified
+default_version: 0.1.0
+
+# Which PaaSible pricing tiers can deploy this stack
+# Options: free, starter, pro, enterprise
+compatible_tiers:
+  - pro
+  - enterprise
+
+# List of software components included in this stack
+components:
+  - Example Service
+  - Example Database
+
+# Kubernetes namespace where this stack will be deployed
+namespace: my-custom-stack
+
+# Category for grouping in the PaaSible dashboard
+# Common categories: operations, data, developer-platform, ai-ml, applications, intelligence
+category: applications
+
+# Icon identifier (used by the PaaSible dashboard UI)
+icon: package
+
+# Link to documentation for this stack
+docs_url: https://docs.example.com/stacks/my-custom-stack
+
+# Tier-specific resource presets
+# Each tier defines default resource allocations and feature flags.
+# PaaSible selects the appropriate preset based on the cluster's pricing tier.
+tier_presets:
+  pro:
+    service:
+      replicas: 1
+      resources:
+        requests: {cpu: "250m", memory: "512Mi"}
+        limits: {cpu: "1", memory: "1Gi"}
+    database:
+      replicas: 1
+      ha: false
+  enterprise:
+    service:
+      replicas: 3
+      resources:
+        requests: {cpu: "500m", memory: "1Gi"}
+        limits: {cpu: "2", memory: "4Gi"}
+    database:
+      replicas: 3
+      ha: true
+
+# Values that users can override from the PaaSible dashboard
+# Each entry defines a tunable parameter with type constraints.
+overridable_values:
+  - key: service.replicas
+    type: integer
+    description: "Number of service replicas"
+    min: 1
+    max: 5
+  - key: service.resources.requests.memory
+    type: string
+    description: "Service memory request"
+    allowed_values: ["512Mi", "1Gi", "2Gi"]

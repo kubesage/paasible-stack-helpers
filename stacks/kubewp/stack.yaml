@@ -1,0 +1,44 @@
+slug: kubewp
+display_name: KubeWP
+description: Managed WordPress platform stack for enterprise-grade hosting on Kubernetes.
+component_name: oci://ghcr.io/kubesage/charts/kubewp
+default_version: 0.1.0
+compatible_tiers:
+  - enterprise
+components:
+  - KubeWP control plane
+  - WordPress runtime
+  - Managed ingress
+namespace: kubewp
+category: applications
+icon: layout-dashboard
+docs_url: https://docs.paas.ro/stacks/kubewp
+
+tier_presets:
+  enterprise:
+    wordpress:
+      replicas: 3
+      php:
+        memoryLimit: "1Gi"
+    mysql:
+      resources:
+        requests: { cpu: "500m", memory: "2Gi" }
+        limits: { cpu: "2", memory: "4Gi" }
+    redis:
+      enabled: true
+      ha: true
+
+overridable_values:
+  - key: wordpress.replicas
+    type: integer
+    description: "Number of WordPress replicas"
+    min: 1
+    max: 5
+  - key: wordpress.php.memoryLimit
+    type: string
+    description: "PHP memory limit"
+    allowed_values: ["256Mi", "512Mi", "1Gi"]
+  - key: mysql.resources.requests.memory
+    type: string
+    description: "MySQL memory request"
+    allowed_values: ["512Mi", "1Gi", "2Gi"]
