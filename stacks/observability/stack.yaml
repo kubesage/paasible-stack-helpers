@@ -3,11 +3,6 @@ display_name: Observability
 description: Managed observability stack with metrics, logs, dashboards, and alerting.
 component_name: oci://ghcr.io/kubesage/charts/observability
 default_version: 0.1.0
-compatible_tiers:
-  - free
-  - starter
-  - pro
-  - enterprise
 components:
   - Prometheus
   - Grafana
@@ -16,53 +11,19 @@ components:
 namespace: observability
 category: operations
 icon: activity
-docs_url: https://docs.paas.ro/stacks/observability
+docs_url: https://docs.paasible.com/stacks/observability
 
-tier_presets:
-  free:
-    prometheus:
-      resources:
-        requests: { cpu: "100m", memory: "256Mi" }
-        limits: { cpu: "500m", memory: "512Mi" }
-      retention: "24h"
-    grafana:
-      replicas: 1
-    loki:
-      resources:
-        requests: { cpu: "100m", memory: "128Mi" }
-  starter:
-    prometheus:
-      resources:
-        requests: { cpu: "250m", memory: "512Mi" }
-        limits: { cpu: "1", memory: "1Gi" }
-      retention: "7d"
-    grafana:
-      replicas: 1
-    loki:
-      resources:
-        requests: { cpu: "250m", memory: "256Mi" }
-  pro:
-    prometheus:
-      resources:
-        requests: { cpu: "500m", memory: "1Gi" }
-        limits: { cpu: "2", memory: "4Gi" }
-      retention: "30d"
-    grafana:
-      replicas: 2
-    loki:
-      resources:
-        requests: { cpu: "500m", memory: "512Mi" }
-  enterprise:
-    prometheus:
-      resources:
-        requests: { cpu: "1", memory: "2Gi" }
-        limits: { cpu: "4", memory: "8Gi" }
-      retention: "90d"
-    grafana:
-      replicas: 3
-    loki:
-      resources:
-        requests: { cpu: "1", memory: "1Gi" }
+defaults:
+  prometheus:
+    resources:
+      requests: { cpu: "250m", memory: "512Mi" }
+      limits: { cpu: "1", memory: "2Gi" }
+    retention: "7d"
+  grafana:
+    replicas: 1
+  loki:
+    resources:
+      requests: { cpu: "250m", memory: "256Mi" }
 
 overridable_values:
   - key: prometheus.retention
@@ -73,7 +34,7 @@ overridable_values:
     type: integer
     description: "Number of Grafana replicas"
     min: 1
-    max: 3
+    max: 5
   - key: loki.resources.requests.memory
     type: string
     description: "Loki memory request"

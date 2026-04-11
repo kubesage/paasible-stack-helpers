@@ -3,9 +3,6 @@ display_name: BI & Analytics
 description: Managed BI and analytics platform with ETL orchestration and dashboards.
 component_name: oci://ghcr.io/kubesage/charts/bi-analytics
 default_version: 0.1.0
-compatible_tiers:
-  - pro
-  - enterprise
 components:
   - Airflow
   - Superset
@@ -13,32 +10,19 @@ components:
 namespace: analytics
 category: data
 icon: chart-bar
-docs_url: https://docs.paas.ro/stacks/bi-analytics
+docs_url: https://docs.paasible.com/stacks/bi-analytics
 
-tier_presets:
-  pro:
-    airflow:
-      workers:
-        replicas: 1
-        resources:
-          requests: { cpu: "250m", memory: "512Mi" }
-          limits: { cpu: "1", memory: "2Gi" }
-    superset:
+defaults:
+  airflow:
+    workers:
       replicas: 1
-    datalake:
-      enabled: false
-  enterprise:
-    airflow:
-      workers:
-        replicas: 4
-        resources:
-          requests: { cpu: "500m", memory: "4Gi" }
-          limits: { cpu: "2", memory: "8Gi" }
-    superset:
-      replicas: 3
-    datalake:
-      enabled: true
-      ha: true
+      resources:
+        requests: { cpu: "250m", memory: "512Mi" }
+        limits: { cpu: "1", memory: "2Gi" }
+  superset:
+    replicas: 1
+  datalake:
+    enabled: false
 
 overridable_values:
   - key: airflow.workers.replicas

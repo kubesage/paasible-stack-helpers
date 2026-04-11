@@ -3,9 +3,6 @@ display_name: Kubeflow
 description: Managed MLOps platform with pipelines, notebooks, and service mesh support.
 component_name: oci://ghcr.io/kubesage/charts/kubeflow
 default_version: 0.1.0
-compatible_tiers:
-  - pro
-  - enterprise
 components:
   - Kubeflow
   - Istio
@@ -13,31 +10,19 @@ components:
 namespace: kubeflow
 category: ai-ml
 icon: brain
-docs_url: https://docs.paas.ro/stacks/kubeflow
+docs_url: https://docs.paasible.com/stacks/kubeflow
 
-tier_presets:
-  pro:
-    notebook:
-      resources:
-        requests: { cpu: "500m", memory: "2Gi" }
-        limits: { cpu: "2", memory: "4Gi" }
-    katib:
-      enabled: true
-    pipelines:
-      parallelism: 2
-    gpu:
-      enabled: false
-  enterprise:
-    notebook:
-      resources:
-        requests: { cpu: "1", memory: "8Gi" }
-        limits: { cpu: "4", memory: "16Gi" }
-    katib:
-      enabled: true
-    pipelines:
-      parallelism: 8
-    gpu:
-      enabled: true
+defaults:
+  notebook:
+    resources:
+      requests: { cpu: "500m", memory: "2Gi" }
+      limits: { cpu: "2", memory: "4Gi" }
+  katib:
+    enabled: true
+  pipelines:
+    parallelism: 2
+  gpu:
+    enabled: false
 
 overridable_values:
   - key: notebook.resources.requests.memory

@@ -3,10 +3,6 @@ display_name: CI Runners
 description: Managed CI/CD runner stack for GitHub Actions and GitLab workloads.
 component_name: oci://ghcr.io/kubesage/charts/ci-runners
 default_version: 0.1.0
-compatible_tiers:
-  - starter
-  - pro
-  - enterprise
 components:
   - GitHub Actions runners
   - GitLab runners
@@ -14,27 +10,14 @@ components:
 namespace: ci-runners
 category: developer-platform
 icon: rocket
-docs_url: https://docs.paas.ro/stacks/ci-runners
+docs_url: https://docs.paasible.com/stacks/ci-runners
 
-tier_presets:
-  starter:
-    runner:
-      maxCount: 2
-      resources:
-        requests: { cpu: "500m", memory: "512Mi" }
-        limits: { cpu: "1", memory: "1Gi" }
-  pro:
-    runner:
-      maxCount: 5
-      resources:
-        requests: { cpu: "1", memory: "2Gi" }
-        limits: { cpu: "2", memory: "4Gi" }
-  enterprise:
-    runner:
-      maxCount: 10
-      resources:
-        requests: { cpu: "2", memory: "4Gi" }
-        limits: { cpu: "4", memory: "8Gi" }
+defaults:
+  runner:
+    maxCount: 2
+    resources:
+      requests: { cpu: "500m", memory: "512Mi" }
+      limits: { cpu: "1", memory: "1Gi" }
 
 overridable_values:
   - key: runner.maxCount
