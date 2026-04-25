@@ -11,6 +11,23 @@ Each stack descriptor is a YAML file that defines:
 - Default resource allocations and feature flags
 - User-overridable configuration values
 
+## Local Development Rule
+
+All install / build / dev / test commands run inside containers. Never on host. See: workspace `CLAUDE.md > Local Development Rule` for the canonical workspace-level rule (when this repo is cloned alongside the kubesage workspace).
+
+| Verb | Container command |
+|------|-------------------|
+| `go mod download` | `make install` |
+| `go build` | `make build` |
+| `go test` | `make test` |
+| `air` (HMR) | `make dev` |
+
+Bypass once: `KUBESAGE_ALLOW_HOST=1 go test ./...` (audited).
+
+Linters and read-only diagnostics allowed on host: `golangci-lint run`, `go vet`, `go fmt` (the bin/go wrapper has an allowlist for read-only subcommands).
+
+Verify: `./ws verify-no-host-install` (workspace level).
+
 ## Stacks
 
 | Stack | Category | Key Components |

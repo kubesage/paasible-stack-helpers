@@ -1,0 +1,35 @@
+# Phase 20.5 — paasible-stack-helpers dev compose.
+# Single dev service for go test/build loops on the helpers libraries.
+# When go.mod eventually lands, `make test` / `make build` / `make dev`
+# all run inside this container — never on host.
+services:
+  helpers:
+    profiles: ["dev"]
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./:/app
+      - helpers_go_pkg:/go/pkg
+      - helpers_go_build:/root/.cache/go-build
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app
+          ignore:
+            - tmp/
+            - .git/
+            - docs/
+            - examples/
+            - stacks/
+        - action: rebuild
+          path: ./go.mod
+        - action: rebuild
+          path: ./go.sum
+        - action: rebuild
+          path: ./Dockerfile.dev
+
+volumes:
+  helpers_go_pkg:
+  helpers_go_build:

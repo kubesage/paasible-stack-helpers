@@ -1,0 +1,22 @@
+# Phase 20.5 M2 fix — exclude large irrelevant dirs from build context.
+# Keeps Dockerfile.dev rebuild fast even when these paths change. The
+# split-COPY pattern in Dockerfile.dev pairs with this file: go.mod/go.sum
+# go in via the first COPY layer; the bulk COPY . . relies on this list to
+# stay cache-friendly.
+
+.git/
+.github/
+docs/
+examples/
+stacks/
+*.md
+!README.md
+
+# Build artifacts
+tmp/
+coverage.out
+*.test
+
+# Local dev env
+.envrc
+bin/

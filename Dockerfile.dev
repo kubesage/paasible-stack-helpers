@@ -1,0 +1,33 @@
+# syntax=docker/dockerfile:1
+# Phase 20.5 — paasible-stack-helpers Dockerfile.dev
+# Go libraries + OCM helpers. Air HMR for go test loops on lib changes.
+#
+# Today this repo has no go.mod (docs/, examples/, stacks/ only). The
+# Dockerfile.dev is in place NOW so that when go.mod lands the supply-chain
+# rule is already enforced — see CONTEXT.md §interfaces.
+FROM golang:1.26-alpine AS dev
+
+WORKDIR /app
+
+RUN apk add --no-cache ca-certificates git
+
+RUN go install github.com/air-verse/air@v1.61.7
+
+# M2 split-COPY pattern: copy go.mod/go.sum first (cache-friendly), download
+# modules, THEN copy the full source. When go.mod doesn't exist yet, the
+# glob pattern `go.mo[d]` skips silently and we rely on the .dockerignore to
+# exclude docs/, examples/, stacks/, .git/ from the bulk COPY below.
+COPY go.mo[d] go.su[m] ./
+
+# M4 shell-idiom fix: real go-mod errors propagate; only the file-existence
+# test gates the action. The original `[ -f go.mod ] && ... || echo` masked
+# legitimate failures (proxy unreachable etc.).
+RUN if [ -f go.mod ]; then go mod download; fi
+
+# Bulk source copy. .dockerignore excludes docs/, examples/, stacks/, .git/
+# so this layer doesn't bust the cache when those large dirs change.
+COPY . .
+
+EXPOSE 8080
+
+CMD ["air", "-c", ".air.toml"]

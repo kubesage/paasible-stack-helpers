@@ -1,0 +1,12 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd = "go build ./... 2>/dev/null || echo 'no Go code yet'"
+  bin = "./tmp/main"
+  include_ext = ["go"]
+  exclude_dir = ["tmp", "vendor", "docs", "examples", "stacks"]
+  delay = 1000
+
+[log]
+  time = true
