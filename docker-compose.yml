@@ -2,6 +2,7 @@
 # Single dev service for go test/build loops on the helpers libraries.
 # When go.mod eventually lands, `make test` / `make build` / `make dev`
 # all run inside this container — never on host.
+name: paasible-stack-helpers
 services:
   helpers:
     profiles: ["dev"]
